@@ -1,54 +1,56 @@
+"""System module."""
+import sys
 import base64
 import ast
 import io
-import sys
 
-def open_file(file_name):
+def open_file(file_name: str) -> str:
+    """Return configuration file data."""
     try:
-        file = io.open(file_name, "r")
+        file = io.open(file_name, "r", encoding="utf-8")
         return file.read()
     except FileNotFoundError:
-        print ("Файл не найден.")
+        print ("File not found.")
         sys.exit()
 
-def decoding(data):
+def decoding(data: str) -> tuple:
+    """Return decoded data."""
     try:
-        file_data = data.encode("ascii")
         if file_data == "":
             raise Exception
-        base64_encoded_data = base64.b64decode(file_data)
-        base64_message = base64_encoded_data.decode("utf-8")
+        base64_encoded_data = bytes(base64.b64decode(data))
+        base64_message = str(base64_encoded_data.decode("utf-8"))
         dic = ast.literal_eval(base64_message)
         return dic
     except Exception:
-        print ("Ошибка декодирования.")
+        print ("Decoding error.")
         sys.exit()
 
-def reading(dic, key):
+def reading(dic: dict, key: str) -> str:
+    """Check for a key in the dictionary."""
     try:
-        found = dic.get(key)
+        found = bool(dic.get(key))
         if found:
             value = dic[key]
-            return value
         else:
             raise Exception
     except Exception:
-        print ("Ключ {0} не найден.".format(key))
+        print ("Key {0} not found.".format(key))
         sys.exit()
+    return value
 
-file_name = "base64.txt"
-file_data = open_file(file_name)
+FILENAME = str("base64.txt")
+file_data = open_file(FILENAME)
 dictionary = decoding(file_data)
 cars = reading(dictionary, "cars")
 customers = reading(dictionary, "customers")
 for car in cars:
     for customer in customers:
-        price = reading(car, "price")
-        balance = reading(customer, "balance")
+        price = int(reading(car, "price"))
+        balance = int(reading(customer, "balance"))
         if price/100 <= balance:
             brand = reading(car, "brand")
             model = reading(car, "model")
             firstname = reading(customer, "firstname")
-            lastaname = reading(customer, "lastaname")
-            print("Car {0} {1} can be offered for {2} {3}.".format(brand, model, firstname, lastaname))
-
+            lastname = reading(customer, "lastaname")
+            print("Car {0} {1} can be offered for {2} {3}.".format(brand, model, firstname, lastname))
