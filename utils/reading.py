@@ -9,7 +9,7 @@ def reading(dic: dict, key: str) -> str:
             value = dic[key]
         else:
             raise Exception
-    except Exception:
+    except KeyError:
         print ("Key {0} not found.".format(key))
         sys.exit()
     return value

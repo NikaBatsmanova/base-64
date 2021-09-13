@@ -1,7 +1,7 @@
 """File module."""
-from open_file import open_file
-from decoding import decoding
-from reading import reading
+from utils.open_file import open_file
+from utils.decoding import decoding
+from utils.reading import reading
 
 FILENAME = str("base64.txt")
 file_data = open_file(FILENAME)
