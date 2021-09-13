@@ -22,3 +22,4 @@ def decoding(data: str) -> tuple:
     except EmptyFile:
         print ("Empty File.")
         sys.exit()
+        
